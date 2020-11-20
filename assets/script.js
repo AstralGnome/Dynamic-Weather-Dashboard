@@ -5,10 +5,14 @@ function handleSearch(){
 
     makeWeatherRequest(search)
 
-    }
+}
 
 function makeWeatherRequest(search) {
+    
     //NEXT, make the request to the URL with JQuery ajax
+    
+    //NEXT, make the request to the URL with JQuery ajax
+    
     $.ajax(queryURL).then(function (response){
         
         //START rendering data to the HTML
@@ -20,11 +24,16 @@ function makeWeatherRequest(search) {
     });
 }
 
-function makeOneCallRequest( lat, lng ) {
+function makeOneCallRequest(lat, lng) {
 
+    //NEXT, we need to build the URL for the first API request
+
+    //NEXT, make the request to the URL with JQuery ajax
     $.ajax(queryURL).then(function (response){
         
-        
-        
+        // finish rendering data to HTML
+    
     }); 
 }
+
+//pseudo code the HTML
