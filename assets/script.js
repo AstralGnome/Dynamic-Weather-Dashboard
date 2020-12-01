@@ -2,7 +2,6 @@
 
 $("#search-button").on("click", setText);
 $(".list-group-item").on("click", function(){
-  console.log(this.innerHTML)
 
   makeWeatherRequest(this.innerHTML)
 });
@@ -14,7 +13,8 @@ function setText(event) {
   
   var textArea = $("#city");
   var textAreaValue = textArea.val();
-  if (locationArray.includes(textAreaValue)) return;
+
+  // if (locationArray.includes(textAreaValue)) return //this is broken
 
   var storageKey = textArea.attr("id");
   localStorage.setItem(storageKey, JSON.stringify(textAreaValue));
@@ -32,15 +32,13 @@ function setText(event) {
 function handleSearch() {
   
   var storedCities = JSON.parse(localStorage.getItem("cities")) || []
-  console.log(storedCities)
   
   for (var i = 0; i < storedCities.length; i++) {
-    $("#li-"+i).text(storedCities[i])
+    $("#li-"+i).text(storedCities[i].toUpperCase())
   }
   
   var storedCity = JSON.parse(localStorage.getItem("city"));
   makeWeatherRequest(storedCity);
-    console.log(storedCity)
   };
 
 function makeWeatherRequest(cityName) {
@@ -53,9 +51,6 @@ function makeWeatherRequest(cityName) {
     method: "GET",
   }).then(function (response) {
     // Printing the entire object to console
-    console.log(response.main.temp);
-    console.log(response);
-    
     var lat = response.coord.lat;
     var lon = response.coord.lon;
     
@@ -86,12 +81,34 @@ function makeWeatherRequest(cityName) {
           $("#main-uv").addClass("badge badge-danger")
       }
     }
-  
+
+    $("#date-1").text("Date: " + moment().add(1, "days").format('MM/DD'));
+    $("#icon-1").attr("src", "https://openweathermap.org/img/w/" + forecastResponse.daily[0].weather[0].icon + ".png")     
+    $("#temp-1").text("High temp: " + forecastResponse.daily[0].temp.max + " °F")
+    $("#hum-1").text("Humidity: " + forecastResponse.daily[0].humidity + "%")
+ 
+    $("#date-2").text("Date: " + moment().add(2, "days").format('MM/DD'))
+    $("#icon-2").attr("src", "https://openweathermap.org/img/w/" + forecastResponse.daily[1].weather[0].icon + ".png")     
+    $("#temp-2").text("High temp: " + forecastResponse.daily[1].temp.max + " °F")
+    $("#hum-2").text("Humidity: " + forecastResponse.daily[1].humidity + "%")
+ 
+    $("#date-3").text("Date: " + moment().add(3, "days").format('MM/DD'))
+    $("#icon-3").attr("src", "https://openweathermap.org/img/w/" + forecastResponse.daily[2].weather[0].icon + ".png")     
+    $("#temp-3").text("High temp: " + forecastResponse.daily[2].temp.max + " °F")
+    $("#hum-3").text("Humidity: " + forecastResponse.daily[2].humidity + "%")
+ 
+    $("#date-4").text("Date: " + moment().add(4, "days").format('MM/DD'))
+    $("#icon-4").attr("src", "https://openweathermap.org/img/w/" + forecastResponse.daily[3].weather[0].icon + ".png")     
+    $("#temp-4").text("High temp: " + forecastResponse.daily[3].temp.max + " °F")
+    $("#hum-4").text("Humidity: " + forecastResponse.daily[3].humidity + "%")
+ 
+    $("#date-5").text("Date: " + moment().add(5, "days").format('MM/DD'))
+    $("#icon-5").attr("src", "https://openweathermap.org/img/w/" + forecastResponse.daily[4].weather[0].icon + ".png")     
+    $("#temp-5").text("High temp: " + forecastResponse.daily[4].temp.max + " °F")
+    $("#hum-5").text("Humidity: " + forecastResponse.daily[4].humidity + "%")
+ 
     });
   }); 
 }
 
-// var cityName = $("#city-input").text()
-// console.log(cityName)
-//pseudo code the HTML
 handleSearch();
