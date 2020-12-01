@@ -1,58 +1,50 @@
 //WHEN the user clicks the search button
 
 $("#search-button").on("click", setText);
+$(".list-group-item").on("click", function(){
+  console.log(this.innerHTML)
 
-var locationArray = []
+  makeWeatherRequest(this.innerHTML)
+});
+
+var locationArray = JSON.parse(localStorage.getItem("cities")) || []
 
 function setText(event) {
   event.preventDefault();
   
   var textArea = $("#city");
-  
   var textAreaValue = textArea.val();
-  
+  if (locationArray.includes(textAreaValue)) return;
+
   var storageKey = textArea.attr("id");
-  
   localStorage.setItem(storageKey, JSON.stringify(textAreaValue));
   
-  
+  makeWeatherRequest(textAreaValue)
   
   locationArray.unshift(textAreaValue)
-  
   localStorage.setItem("cities", JSON.stringify(locationArray))
   
-  var storedCities = JSON.parse(localStorage.getItem("cities")) || [] //not sure what this does on the end here
-  
-  console.log(storedCities)
-  
-  
-  for (var i = 0; i < storedCities.length; i++) {
-    
-    $("#li-"+i).text(storedCities[i])
-  }
-
   for (var i = 0; i < locationArray.length; i++) {
-    
-    $("#li-"+i).text(locationArray[i])
+    $("#li-"+i).text(locationArray[i].toUpperCase())
   }
-
-}
+} 
 
 function handleSearch() {
-    var storedCity = JSON.parse(localStorage.getItem("city"));
-    makeWeatherRequest(storedCity);
+  
+  var storedCities = JSON.parse(localStorage.getItem("cities")) || []
+  console.log(storedCities)
+  
+  for (var i = 0; i < storedCities.length; i++) {
+    $("#li-"+i).text(storedCities[i])
+  }
+  
+  var storedCity = JSON.parse(localStorage.getItem("city"));
+  makeWeatherRequest(storedCity);
     console.log(storedCity)
   };
 
 function makeWeatherRequest(cityName) {
-  //NEXT, make the request to the URL with JQuery ajax
-      //NEXT, we need to build the URL for the first API request
-      
-      //NEXT, make the request to the URL with JQuery ajax
-      
-      // finish rendering data to HTML
-  
-      // var cityName = localStorage.getItem(storageKey)
+
   var queryURL =
   `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=imperial&appid=2aea25a2ba73c351a3ca2212a808cc72`;
   
@@ -73,9 +65,8 @@ function makeWeatherRequest(cityName) {
       console.log(forecastResponse)
       
       var uv = forecastResponse.current.uvi;
-      console.log(uv)
       
-      //START rendering data to the HTML. How would I accomplish this with back-ticks?
+      //START rendering data to the HTML.
       
       $("#main-city").text(response.name)
       $("#main-temp").text("Temperature: " + response.main.temp + " °F")
@@ -83,8 +74,19 @@ function makeWeatherRequest(cityName) {
       $("#main-wind").text("Wind speed: " + response.wind.speed + " mph")
       $("#main-uv").text("UV index: " + uv)
       
-      //THEN get the lat and lng out of the "response" object
-      //NEXT call "makeOneCallRequest(lat, lng)" and pass in the lat and lng
+      for (i = 0; i < uv; i++) {
+
+        if (uv <= 2) {
+          $("#main-uv").addClass("badge badge-success")
+        }
+        else if (uv < 8) {
+          $("#main-uv").addClass("badge badge-warning")
+      }
+        else if (uv >= 8) {
+          $("#main-uv").addClass("badge badge-danger")
+      }
+    }
+  
     });
   }); 
 }
