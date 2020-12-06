@@ -26,18 +26,34 @@ function setText(event) {
   
   for (var i = 0; i < locationArray.length; i++) {
     $("#li-"+i).text(locationArray[i].toUpperCase())
+    $("#li-"+i).removeClass("invisible")
   }
 } 
 
 function handleSearch() {
   
   var storedCities = JSON.parse(localStorage.getItem("cities")) || []
-  
+
   for (var i = 0; i < storedCities.length; i++) {
     $("#li-"+i).text(storedCities[i].toUpperCase())
+    $("#li-"+i).removeClass("invisible")
+    
+    
   }
-  
-  var storedCity = JSON.parse(localStorage.getItem("city"));
+  var history = document.querySelectorAll("li");
+    
+  for (var i = 0; i < history.length; i++)
+  if ($("#li-"+i).text() === "Location") {
+      $("#li-"+i).addClass("invisible")
+  }
+
+  console.log(history.length)
+  var storedCity = JSON.parse(localStorage.getItem("city")) || ""
+      
+  if (storedCity === ""){
+        return;
+      }
+
   makeWeatherRequest(storedCity);
   };
 
